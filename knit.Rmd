@@ -1,0 +1,157 @@
+---
+title: "Will VS Denzel"
+output: html_notebook
+author: "Gabriel"
+date: "12/11/2020"
+course: STATS 419 Survey of Multivariate Analysis
+course-short: STATS419
+instructor: Monte J. Shaffer
+email: Gabriel.tessema@wsu.edu
+wsu-id: 11692347
+fig_caption: true
+---
+
+
+## Will VS Denzel
+
+This Project uses different comparing mechanism to compare actors Will Smith and Denzel Washington.
+
+On this project I will raise critical research questions and compare Will Smith and Denzel Washington based on the information provided by IMDB. I will also provide the code that help me generate this research questions.  
+
+
+# # Movie Count by year
+```{r}
+## Will Smith movies
+will.search = IMDB.searchPersonName("Will* Smith*");
+will.nmid = will.search$nmid[1];
+will.nmid = "nm0000226";
+will.movies = IMDB.getMoviesForPerson(will.nmid);
+will.movies;
+will.movies.ttid = will.movies$ttid;
+
+## Denzel Movies
+
+Denzel.nmid = Denzel.search$nmid[1];
+Denzel.nmid  = "nm0000243";
+Denzel.movies = IMDB.getMoviesForPerson(Denzel.nmid);
+Denzel.movies;
+Denzel.movies.ttid = Denzel.movies$ttid;
+
+```
+
+Based on the movies they starred in Will Smith has 111 movies and Denzel Washington has 61. As we can see in the data Will Smith has more movies in recent years and Denzel has most of his movies in the 90's and 2000's. We also may consider the age difference between this two stars Denzel Washingtin is 65 years old and Will Smith is 52 years old.Denzel Washington's first movie Carbon copy was released in 1981 and Will Smith's first movie six degrees of seperation was released in 1993. Based on movie counts by year, making different genres and staying relevant to the moie industry Will Smith is better than Denzel Washington.
+
+### Rankings
+
+
+
+```{r}
+# we could rank on other columns ...
+
+# loadInflationData();
+will.movies = standardizeDollarsInDataFrame(will.movies, 2000, "millions", "year", "millions2000");
+
+# adjust for inflation ...
+will.movies = sortDataFrameByNumericColumns(will.movies, "millions2000", "DESC");  ## NA's go to end ...
+will.movies$rank.money = 1:nrow(will.movies);
+
+
+will.movies = sortDataFrameByNumericColumns(will.movies, "minutes", "DESC");
+will.movies$rank.minutes = 1:nrow(will.movies);
+
+
+will.movies = sortDataFrameByNumericColumns(will.movies, "ratings", "DESC");
+will.movies$rank.ratings = 1:nrow(will.movies);
+
+will.movies = sortDataFrameByNumericColumns(will.movies, "metacritic", "DESC");
+will.movies$rank.metacritic = 1:nrow(will.movies);
+
+will.movies = sortDataFrameByNumericColumns(will.movies, "votes", "DESC");
+will.movies$rank.votes = 1:nrow(will.movies);
+
+will.movies = sortDataFrameByNumericColumns(will.movies, "year", "ASC");
+will.movies$rank.year = 1:nrow(will.movies);
+
+
+will.movies;
+
+
+Denzel.movies = standardizeDollarsInDataFrame(Denzel.movies, 2000, "millions", "year", "millions2000");
+
+
+Denzel.movies = sortDataFrameByNumericColumns(Denzel.movies, "millions2000", "DESC");  ## NA's go to end ...
+Denzel.movies$rank.money = 1:nrow(Denzel.movies);
+
+
+Denzel.movies = sortDataFrameByNumericColumns(Denzel.movies, "minutes", "DESC");
+Denzel.movies$rank.minutes = 1:nrow(Denzel.movies);
+
+
+Denzel.movies = sortDataFrameByNumericColumns(Denzel.movies, "ratings", "DESC");
+Denzel.movies$rank.ratings = 1:nrow(Denzel.movies);
+
+Denzel.movies = sortDataFrameByNumericColumns(Denzel.movies, "metacritic", "DESC");
+Denzel.movies$rank.metacritic = 1:nrow(Denzel.movies);
+
+Denzel.movies = sortDataFrameByNumericColumns(Denzel.movies, "votes", "DESC");
+Denzel.movies$rank.votes = 1:nrow(Denzel.movies);
+
+Denzel.movies = sortDataFrameByNumericColumns(Denzel.movies, "year", "ASC");
+Denzel.movies$rank.year = 1:nrow(Denzel.movies);
+
+
+Denzel.movies;
+```
+
+This two stars made so many block buster movies and entertained us, the rankings that I would like to compare are the top three movies from both actors based on the money they make after we adjust inflation and the audience ratings they recevied.
+
+Denzel Washington
+
+1.American Gangster 108.0994299 (7.8 rating)
+
+2.Training Day 74.5098024 (7.7 rating)
+
+3.Inside Man 75.6022917 (7.6 rating)
+
+Will Smith
+
+1. I am legened 212.93494806 (7.2 rating)
+
+2. Suicide Squad 233.25244680 (6.0 rating)
+
+3. Independence Day 336.02596558	(7.0 rating)
+
+When we compare the top three movies that Will Smith and Denzel Washingto made we can clearly see that Will Smith is the higher paid actor. We should also consider since Will made more movies than Denzel he will most likely get paid more. Based on the ratings they have Denzel Washington beats all top three of Will Smith movies. If we think about the times these stars made movies Will is more recent and the film industry have access to online ratings and votes.Will Smith will take the higher points because he has the highest paying movie roles.
+
+## Actor Ranking on some films
+
+Based on top-50 films each year
+
+```{r}
+
+will.rank = subsetDataFrame(imdb.data$all.movies.actors.characters, "nmid", "==", will.nmid);
+will.rank;
+
+Denzel.rank = subsetDataFrame(imdb.data$all.movies.actors.characters, "nmid", "==", Denzel.nmid);
+Denzel.rank;
+```
+When we look into the top 50-movies and the ratings of these two stars, Event hough Will made more movies Denzel was rated higher.Denzel Washington will have higher point for this section.
+
+### Movie Details: Extra
+
+
+```{r}
+
+will2 = merge(will.movies, imdb.data$movies.df$info, by="ttid");
+will2;
+
+Denzel2 = merge(Denzel.movies, imdb.data$movies.df$info, by="ttid");
+Denzel2
+```
+When we look into these extra set of data we can consider creatves, locations, ratings, budget, gross and language.
+
+### Conclusion
+
+Based on the data provided and the critical research question raised I can conclude that Will Smith is the better actor. Will Smith have been in the movie industry for almost 30 years and he has been very relevant still. Not only he can play great roles he also sing/rap, dance and entertains his audience that why he stays in everybody's heart. Will Smith gave the world his two children Willow and Jaden Smith that are following his footsteps of acting and singing/rapping.
+
+Even though gave us so many amaizing movies like Training Day and John Q when it comes to comparing the stats and data it is obvious that Will has the higher points. Will Smith movies are very diverse and has a very high margin of profits compared to Denzel Washington. The other mail point that helped me to make the decsion is that Will Smith is that the ratings he has was very high for having a lot of movies and a lot of votes.
